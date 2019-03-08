@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2C2C5413-2770-4454-BD98-68CFF81EBB1A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>CrossPlatformUITests</RootNamespace>
+    <AssemblyName>CrossPlatformUITests</AssemblyName>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.UITest">
+      <HintPath>..\packages\Xamarin.UITest.2.2.7\lib\net45\Xamarin.UITest.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="ExtentReports">
+      <HintPath>..\packages\ExtentReports.3.0.2\lib\ExtentReports.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Tests\LoginTest.cs" />
+    <Compile Include="Screens\LoginScreen.cs" />
+    <Compile Include="Screens\SignUpScreen.cs" />
+    <Compile Include="Base\BaseTest.cs" />
+    <Compile Include="Base\BaseScreen.cs" />
+    <Compile Include="Support\XamarinUITestWrapper.cs" />
+    <Compile Include="Base\AppInitializer.cs" />
+    <Compile Include="Config\AppConfigKeys.cs" />
+    <Compile Include="Config\AppConfigReader.cs" />
+    <Compile Include="Support\AutoUtills.cs" />
+    <Compile Include="Screens\FirstPageScreen.cs" />
+    <Compile Include="Tests\ListTests.cs" />
+    <Compile Include="Screens\ListScreen.cs" />
+    <Compile Include="Constants\Copy.cs" />
+    <Compile Include="Support\ReportUtill.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="app.config" />
+    <None Include="build.sh" />
+    <None Include="Reports\Android_Test_Report.html" />
+    <None Include="Reports\iOS_Test_Report.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tests\" />
+    <Folder Include="Base\" />
+    <Folder Include="Screens\" />
+    <Folder Include="Support\" />
+    <Folder Include="Config\" />
+    <Folder Include="Constants\" />
+    <Folder Include="Reports\" />
+    <Folder Include="ScreenShots\" />
+    <Folder Include="New Folder\" />
+    <Folder Include="obj\Debug\" />
+    <Folder Include="bin\Debug\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UITestSampleApp.Droid\UITestSampleApp.Droid.csproj">
+      <Project>{74F83F09-82B3-47B4-93F8-59B6FAA89EFA}</Project>
+      <Name>UITestSampleApp.Droid</Name>
+      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\UITestSampleApp.iOS\UITestSampleApp.iOS.csproj">
+      <Project>{807CCD2A-05F5-4CC3-BD9E-8C5C4DDC6DEE}</Project>
+      <Name>UITestSampleApp.iOS</Name>
+      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Testdata.json" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>
