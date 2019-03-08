@@ -19,7 +19,7 @@ echo "**************************************************************************
 
     chmod -R 777 $SolutionFileFolder
 
-    msbuild "$UITestProject" /property:Configuration=debug
+    msbuild "$UITestProject" /property:Configuration=Debug
 
 
 
