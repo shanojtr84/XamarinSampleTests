@@ -30,7 +30,7 @@ echo "**************************************************************************
 
 # variables
 appCenterLoginApiToken=$AppCenterLoginForAutomatedUITests # this comes from the build environment variables
-appName="shanojtr/iOSTestApp"
+appName="shanojtr/iOSaPP"
 deviceSetName=3b448fd7
 testSeriesName="master"
 
