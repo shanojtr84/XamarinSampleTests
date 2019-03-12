@@ -8,8 +8,8 @@ using Xamarin.UITest;
 
 namespace CrossPlatformUITests.Base
 {
-    [TestFixture(Platform.Android)]
-    //[TestFixture(Platform.iOS)]
+    // [TestFixture(Platform.Android)]
+    [TestFixture(Platform.iOS)]
     public abstract class BaseTest
     {
         public IApp app;
