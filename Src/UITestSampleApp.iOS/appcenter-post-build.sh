@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
-if [ "$APPCENTER_XAMARIN_CONFIGURATION" == "Debug" ];then
 
-    echo "Post Build Script Started"
-    
+# Post Build Script
+
+set -e # Exit immediately if a command exits with a non-zero status (failure)
+
+echo "**************************************************************************************************"
+echo "Post Build Script"
+echo "**************************************************************************************************"
+
     SolutionFile=`find "$APPCENTER_SOURCE_DIRECTORY" -name UITestSampleApp.sln`
     SolutionFileFolder=`dirname $SolutionFile`
 
-    UITestProject=`find "$APPCENTER_SOURCE_DIRECTORY" -name UITestSampleApp.UITests.csproj`
+    UITestProject=`find "$APPCENTER_SOURCE_DIRECTORY" -name CrossPlatformUITests.csproj`
 
     echo SolutionFile: $SolutionFile
     echo SolutionFileFolder: $SolutionFileFolder
@@ -14,41 +19,34 @@ if [ "$APPCENTER_XAMARIN_CONFIGURATION" == "Debug" ];then
 
     chmod -R 777 $SolutionFileFolder
 
-    msbuild "$UITestProject" /property:Configuration=$APPCENTER_XAMARIN_CONFIGURATION
+    msbuild "$UITestProject" /property:Configuration=Debug
 
-    UITestDLL=`find "$APPCENTER_SOURCE_DIRECTORY" -name "UITestSampleApp.UITests.dll" | grep bin`
-    echo UITestDLL: $UITestDLL
 
-    UITestBuildDir=`dirname $UITestDLL`
-    echo UITestBuildDir: $UITestBuildDir
 
-    UITestVersionNumber=`grep '[0-9]' $UITestProject | grep Xamarin.UITest|grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,10\}\-'dev`
-    echo UITestPrereleaseVersionNumber: $UITestVersionNumber
 
-    UITestVersionNumberSize=${#UITestVersionNumber} 
-    echo UITestVersionNumberSize: $UITestVersionNumberSize
+##################################################
+# Start UI Tests
+##################################################
 
-    if [ $UITestVersionNumberSize == 0 ]
-    then
-        UITestVersionNumber=`grep '[0-9]' $UITestProject | grep Xamarin.UITest|grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
-        echo UITestVersionNumber: $UITestVersionNumber
-    fi
+# variables
+appCenterLoginApiToken=$AppCenterLoginForAutomatedUITests # this comes from the build environment variables
+appName="shanojtr/iOSTestApp"
+deviceSetName=3b448fd7
+testSeriesName="master"
 
-    TestCloudExe=`find ~/.nuget | grep test-cloud.exe | grep $UITestVersionNumber | head -1`
-    echo TestCloudExe: $TestCloudExe
+echo ""
+echo "Start Xamarin.UITest run"
+echo "   App Name: $appName"
+echo " Device Set: $deviceSetName"
+echo "Test Series: $testSeriesName"
+echo ""
 
-    TestCloudExeDirectory=`dirname $TestCloudExe`
-    echo TestCloudExeDirectory: $TestCloudExeDirectory
+echo "> Run UI test command"
+# Note: must put a space after each parameter/value pair
+appcenter test run uitest --app $appName --devices $deviceSetName --app-path $APPCENTER_OUTPUT_DIRECTORY/UITestSampleApp.ipa --test-series $testSeriesName --locale "en_US" --build-dir $APPCENTER_SOURCE_DIRECTORY/Src/CrossPlatformUITests/bin/Debug --uitest-tools-dir $APPCENTER_SOURCE_DIRECTORY/Src/packages/Xamarin.UITest.*/tools --token $appCenterLoginApiToken
 
-    IPAFile=`find "$APPCENTER_SOURCE_DIRECTORY" -name *.ipa | head -1`
-    echo IPAFile: $IPAFile
 
-    DSYMFile=`find "$APPCENTER_SOURCE_DIRECTORY" -name *.dSYM | head -1`
-    echo DSYMFile: $DSYMFile
-
-    npm install -g appcenter-cli
-
-    appcenter login --token $AppCenterAPIToken
-
-    appcenter test run uitest --app "bminnick/UITestSampleApp-1" --devices "bminnick/ios10-plus" --app-path $IPAFile --test-series "master" --locale "en_US" --build-dir $UITestBuildDir --dsym-dir $DSYMFile --uitest-tools-dir $TestCloudExeDirectory --async
-fi
+echo ""
+echo "**************************************************************************************************"
+echo "Post Build Script complete"
+echo "**************************************************************************************************"
